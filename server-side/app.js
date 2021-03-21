@@ -1,6 +1,9 @@
 const express=require("express");
 const app=express();
 const morgan=require("morgan");
+const bodyparser =require("body-parser");
+var cookieParser = require('cookie-parser')
+const expressValidator=require('express-validator')
 const dotenv=require("dotenv");
 const mongoose=require("mongoose");
 
@@ -17,6 +20,8 @@ mongoose.connection.on('error',err=>{
 
 //bring in routes
 const postRoutes=require("./routes/post.js");
+const authRoutes=require("./routes/auth.js");
+const bodyParser = require("body-parser");
 /*
 const myownMiddelware=(req,res,next)=>{
     console.log("middleware applied");
@@ -24,8 +29,11 @@ const myownMiddelware=(req,res,next)=>{
 };*/
 //middleware
 app.use(morgan("dev"));
+app.use(bodyparser.json());
+app.use(cookieParser());
+app.use(expressValidator());
 app.use("/",postRoutes);
-
+app.use("/",authRoutes);
 const port=process.env.PORT||8080;
 app.listen(port,() =>{
     console.log(`a node ja api is listeining on port no.&{port}`);
